@@ -15,7 +15,7 @@ Mata Kuliah Pemrograman Berbasis Kerangka Kerja (PBKK)
 ### Tim Pengembang
 
 - Agil Lukman Hakim Muchdi (5025241037)
-- [Nama Anggota 2] ([NRP])
+- Berwyn Rafif Alvaro (5025241029)
 - Farrel Jatmiko Aji (5025241193)
 
 ## Ringkasan
