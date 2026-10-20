@@ -16,7 +16,7 @@ Mata Kuliah Pemrograman Berbasis Kerangka Kerja (PBKK)
 
 - Agil Lukman Hakim Muchdi (5025241037)
 - [Nama Anggota 2] ([NRP])
-- [Nama Anggota 3] ([NRP])
+- Farrel Jatmiko Aji (5025241193)
 
 ## Ringkasan
 
