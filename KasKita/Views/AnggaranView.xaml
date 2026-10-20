@@ -1,0 +1,120 @@
+<UserControl x:Class="KasKita.Views.AnggaranView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Style="{StaticResource PageStyle}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Anggaran Kegiatan" Style="{StaticResource PageTitle}" />
+                <TextBox x:Name="SearchBox" Grid.Column="1" Width="280" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         materialDesign:HintAssist.Hint="Cari kegiatan (Ctrl+F)"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <DataGrid Height="240" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" AutoGenerateColumns="False"
+                      IsReadOnly="True" CanUserAddRows="False" HeadersVisibility="Column" SelectionMode="Single"
+                      materialDesign:DataGridAssist.CellPadding="10 6">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Kegiatan" Width="*" Binding="{Binding Nama}" />
+                    <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal, StringFormat='dd MMM yyyy', ConverterCulture=id-ID}" />
+                    <DataGridTextColumn Header="Anggaran (Rp)" Binding="{Binding TotalAnggaran, StringFormat=N0, ConverterCulture=id-ID}" />
+                    <DataGridTextColumn Header="Realisasi (Rp)" Binding="{Binding Realisasi, StringFormat=N0, ConverterCulture=id-ID}" />
+                    <DataGridTextColumn Header="Sisa (Rp)" Binding="{Binding Sisa, StringFormat=N0, ConverterCulture=id-ID}" />
+                    <DataGridTemplateColumn Header="Realisasi %" Width="170">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Height="18" Margin="4,0">
+                                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding PersenBar, Mode=OneWay}" Height="18" />
+                                    <TextBlock Text="{Binding Persen, StringFormat='{}{0:N0} %'}" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" FontSize="11" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+                    <DataGridTextColumn Header="Catatan" Binding="{Binding Catatan}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- pengajuan anggaran (Bendahara) -->
+                <materialDesign:Card Grid.Column="0" Padding="16" Margin="0,0,6,0"
+                                     Visibility="{Binding IsBendahara, Converter={StaticResource B2V}}">
+                    <StackPanel>
+                        <TextBlock Text="Ajukan anggaran kegiatan" FontWeight="SemiBold" Margin="0,0,0,8" />
+                        <WrapPanel>
+                            <TextBox x:Name="NamaBox" Width="230" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     materialDesign:HintAssist.Hint="Nama kegiatan"
+                                     Text="{Binding NewNama, UpdateSourceTrigger=PropertyChanged}" />
+                            <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                        SelectedDate="{Binding NewTanggal}" materialDesign:HintAssist.Hint="Tanggal" />
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBox Width="190" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     materialDesign:HintAssist.Hint="Uraian item"
+                                     Text="{Binding ItemUraian, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Width="120" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     materialDesign:HintAssist.Hint="Jumlah (Rp)"
+                                     Text="{Binding ItemJumlah, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button Content="+ ITEM" Height="40" Margin="0,0,0,8" Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Command="{Binding TambahItemCommand}" />
+                        </WrapPanel>
+                        <DataGrid Height="130" ItemsSource="{Binding Draft}" AutoGenerateColumns="False" IsReadOnly="True"
+                                  CanUserAddRows="False" HeadersVisibility="Column">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Uraian" Width="*" Binding="{Binding Uraian}" />
+                                <DataGridTextColumn Header="Jumlah (Rp)" Binding="{Binding Jumlah, StringFormat=N0, ConverterCulture=id-ID}" />
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" Width="28" Height="28"
+                                                    Command="{Binding DataContext.HapusItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}">
+                                                <materialDesign:PackIcon Kind="Close" Width="16" Height="16" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DockPanel Margin="0,10,0,0">
+                            <Button DockPanel.Dock="Right" Content="AJUKAN" Height="40" Command="{Binding AjukanCommand}" />
+                            <TextBlock VerticalAlignment="Center" FontWeight="SemiBold"
+                                       Text="{Binding DraftTotal, StringFormat='Total: Rp {0:N0}', ConverterCulture=id-ID}" />
+                        </DockPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- rincian + persetujuan -->
+                <materialDesign:Card Grid.Column="1" Padding="16" Margin="6,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Rincian anggaran (pilih kegiatan pada tabel)" FontWeight="SemiBold" Margin="0,0,0,8" />
+                        <DataGrid Height="160" ItemsSource="{Binding Detail}" AutoGenerateColumns="False" IsReadOnly="True"
+                                  CanUserAddRows="False" HeadersVisibility="Column">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Uraian" Width="*" Binding="{Binding Uraian}" />
+                                <DataGridTextColumn Header="Jumlah (Rp)" Binding="{Binding Jumlah, StringFormat=N0, ConverterCulture=id-ID}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Visibility="{Binding IsKetua, Converter={StaticResource B2V}}" Margin="0,12,0,0">
+                            <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Catatan persetujuan"
+                                     Text="{Binding CatatanKetua, UpdateSourceTrigger=PropertyChanged}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="SETUJUI" Margin="0,0,8,0" Command="{Binding SetujuiCommand}" />
+                                <Button Content="TOLAK" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding TolakCommand}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,154 @@
+<UserControl x:Class="KasKita.Views.MasterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Style="{StaticResource PageStyle}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Data Master &amp; Sistem" Style="{StaticResource PageTitle}" Margin="0,0,0,12" />
+
+        <TabControl Grid.Row="1" Style="{StaticResource MaterialDesignFilledTabControl}">
+            <!-- FR-02: anggota -->
+            <TabItem Header="ANGGOTA">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <TextBox Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="NIM/NRP" Text="{Binding NimBaru, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="220" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Nama" Text="{Binding NamaBaru, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Jabatan" Text="{Binding JabatanBaru, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="TAMBAH" Height="40" Margin="0,0,16,8" Command="{Binding TambahAnggotaCommand}" />
+                        <TextBox x:Name="SearchBox" Width="240" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Cari anggota (Ctrl+F)"
+                                 Text="{Binding CariAnggota, UpdateSourceTrigger=PropertyChanged}" />
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Anggotas}" AutoGenerateColumns="False" CanUserAddRows="False"
+                              HeadersVisibility="Column" RowEditEnding="Anggota_RowEditEnding"
+                              materialDesign:DataGridAssist.CellPadding="10 6">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NIM/NRP" Binding="{Binding Nim}" />
+                            <DataGridTextColumn Header="Nama" Width="*" Binding="{Binding Nama}" />
+                            <DataGridTextColumn Header="Jabatan" Binding="{Binding Jabatan}" />
+                            <DataGridCheckBoxColumn Header="Aktif" Binding="{Binding Aktif, Mode=OneWay}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Aksi" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="UBAH STATUS" Height="28" Padding="8,0" Margin="0,0,4,0"
+                                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                    Command="{Binding DataContext.ToggleAktifCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Style="{StaticResource MaterialDesignIconButton}" Width="30" Height="30" ToolTip="Hapus"
+                                                    Command="{Binding DataContext.HapusAnggotaCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}">
+                                                <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- FR-04: kategori -->
+            <TabItem Header="KATEGORI">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <TextBox Width="240" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Nama kategori" Text="{Binding KategoriNama, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox Width="140" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  ItemsSource="{Binding JenisOptions}" SelectedItem="{Binding KategoriJenis}" materialDesign:HintAssist.Hint="Jenis" />
+                        <Button Content="TAMBAH" Height="40" Margin="0,0,0,8" Command="{Binding TambahKategoriCommand}" />
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Kategoris}" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" HeadersVisibility="Column" materialDesign:DataGridAssist.CellPadding="10 6">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nama" Width="*" Binding="{Binding Nama}" />
+                            <DataGridTextColumn Header="Jenis" Binding="{Binding Jenis}" />
+                            <DataGridTemplateColumn Header="Aksi">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource MaterialDesignIconButton}" Width="30" Height="30" ToolTip="Hapus"
+                                                Command="{Binding DataContext.HapusKategoriCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}">
+                                            <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- FR-02: periode -->
+            <TabItem Header="PERIODE">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <TextBox Width="240" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Nama periode" Text="{Binding PeriodeNama, UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                    SelectedDate="{Binding PeriodeMulai}" materialDesign:HintAssist.Hint="Mulai" />
+                        <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                    SelectedDate="{Binding PeriodeAkhir}" materialDesign:HintAssist.Hint="Akhir" />
+                        <Button Content="TAMBAH" Height="40" Margin="0,0,0,8" Command="{Binding TambahPeriodeCommand}" />
+                    </WrapPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Periodes}" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" HeadersVisibility="Column" materialDesign:DataGridAssist.CellPadding="10 6">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nama" Width="*" Binding="{Binding Nama}" />
+                            <DataGridTextColumn Header="Mulai" Binding="{Binding TanggalMulai, StringFormat='dd MMM yyyy', ConverterCulture=id-ID}" />
+                            <DataGridTextColumn Header="Akhir" Binding="{Binding TanggalAkhir, StringFormat='dd MMM yyyy', ConverterCulture=id-ID}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- FR-12: log, backup, restore -->
+            <TabItem Header="LOG &amp; BACKUP">
+                <Grid Margin="0,12,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Height="40" Margin="0,0,8,0" Command="{Binding BackupCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="DatabaseExport" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="BACKUP DATABASE" />
+                            </StackPanel>
+                        </Button>
+                        <Button Height="40" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding RestoreCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="DatabaseImport" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="RESTORE DATABASE" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Logs}" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" HeadersVisibility="Column" materialDesign:DataGridAssist.CellPadding="10 6">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Waktu" Binding="{Binding Waktu, StringFormat='dd MMM yyyy HH:mm:ss', ConverterCulture=id-ID}" />
+                            <DataGridTextColumn Header="Pengguna" Binding="{Binding User.Username}" />
+                            <DataGridTextColumn Header="Aksi" Width="*" Binding="{Binding Aksi}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

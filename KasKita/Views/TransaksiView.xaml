@@ -1,0 +1,171 @@
+<UserControl x:Class="KasKita.Views.TransaksiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Style="{StaticResource PageStyle}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Transaksi Kas" Style="{StaticResource PageTitle}" />
+            <TextBox x:Name="SearchBox" Grid.Column="1" Width="300" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Cari transaksi (Ctrl+F)"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <!-- filter (FR-09) -->
+        <WrapPanel Grid.Row="1" Margin="0,0,0,12">
+            <ComboBox Width="180" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding KategoriFilterList}" DisplayMemberPath="Nama"
+                      SelectedItem="{Binding FilterKategori}" materialDesign:HintAssist.Hint="Kategori" />
+            <ComboBox Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding FilterStatus}"
+                      materialDesign:HintAssist.Hint="Status" />
+            <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        SelectedDate="{Binding DateFrom}" materialDesign:HintAssist.Hint="Dari tanggal" />
+            <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        SelectedDate="{Binding DateTo}" materialDesign:HintAssist.Hint="Sampai tanggal" />
+            <Button Content="RESET FILTER" Height="40" Margin="0,0,0,8" Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Command="{Binding ResetCommand}" />
+        </WrapPanel>
+
+        <!-- form tambah (Bendahara) + persetujuan (Ketua) -->
+        <StackPanel Grid.Row="2">
+            <materialDesign:Card Padding="16" Margin="0,0,0,12"
+                                 Visibility="{Binding IsBendahara, Converter={StaticResource B2V}}">
+                <StackPanel>
+                    <TextBlock Text="Tambah transaksi (Ctrl+N fokus form, Ctrl+S simpan)" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <WrapPanel>
+                        <DatePicker Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                    SelectedDate="{Binding NewTanggal}" materialDesign:HintAssist.Hint="Tanggal" />
+                        <ComboBox Width="120" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  ItemsSource="{Binding JenisOptions}" SelectedItem="{Binding NewJenis}"
+                                  materialDesign:HintAssist.Hint="Jenis" />
+                        <ComboBox Width="180" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  ItemsSource="{Binding KategoriForm}" DisplayMemberPath="Nama"
+                                  SelectedItem="{Binding NewKategori}" materialDesign:HintAssist.Hint="Kategori" />
+                        <TextBox x:Name="NominalBox" Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Nominal (Rp)"
+                                 Text="{Binding NewNominal, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Width="260" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 materialDesign:HintAssist.Hint="Keterangan"
+                                 Text="{Binding NewKeterangan, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox Width="220" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  ItemsSource="{Binding KegiatanList}" DisplayMemberPath="Nama"
+                                  SelectedItem="{Binding NewKegiatan}" materialDesign:HintAssist.Hint="Kegiatan terkait" />
+                    </WrapPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <!-- UI-06: drag and drop bukti -->
+                        <Border BorderThickness="2" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary}" CornerRadius="6"
+                                Padding="12,10" Margin="0,0,12,0" AllowDrop="True" Cursor="Hand" Background="Transparent"
+                                Drop="Bukti_Drop" DragOver="Bukti_DragOver">
+                            <Border.InputBindings>
+                                <MouseBinding Gesture="LeftClick" Command="{Binding PilihBuktiCommand}" />
+                            </Border.InputBindings>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CloudUploadOutline" Width="24" Height="24" Margin="0,0,10,0" />
+                                <TextBlock Text="{Binding NewBuktiNama}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Border>
+                        <Button Grid.Column="1" Height="42" Content="TAMBAH TRANSAKSI" Command="{Binding TambahCommand}" />
+                    </Grid>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,0,12"
+                                 Visibility="{Binding IsKetua, Converter={StaticResource B2V}}">
+                <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         materialDesign:HintAssist.Hint="Catatan persetujuan (opsional) — lalu tekan Setujui / Tolak pada baris yang berstatus Menunggu"
+                         Text="{Binding CatatanPersetujuan, UpdateSourceTrigger=PropertyChanged}" />
+            </materialDesign:Card>
+        </StackPanel>
+
+        <!-- UI-02: DataGrid dinamis (sorting, inline editing, paginasi) -->
+        <DataGrid x:Name="TabelTransaksi" Grid.Row="3" ItemsSource="{Binding Items}" AutoGenerateColumns="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="{Binding IsReadOnly}"
+                  EnableRowVirtualization="True" HeadersVisibility="Column" SelectionUnit="FullRow"
+                  materialDesign:DataGridAssist.CellPadding="10 6" RowEditEnding="Grid_RowEditEnding">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tanggal" IsReadOnly="True"
+                                    Binding="{Binding Tanggal, StringFormat='dd MMM yyyy', ConverterCulture=id-ID}" />
+                <DataGridTextColumn Header="Jenis" Binding="{Binding Jenis}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori.Nama}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Nominal (Rp)" Binding="{Binding Nominal, StringFormat=N0, ConverterCulture=id-ID}" />
+                <DataGridTextColumn Header="Keterangan" Width="*" Binding="{Binding Keterangan}" />
+                <DataGridTextColumn Header="Kegiatan" Binding="{Binding Kegiatan.Nama}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" IsReadOnly="True" />
+                <DataGridTemplateColumn Header="Bukti" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding BuktiNama}" Height="28" Padding="6,0" Style="{StaticResource MaterialDesignFlatButton}"
+                                    Command="{Binding DataContext.BukaBuktiCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Aksi" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Status}" Value="Menunggu">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Button Height="28" Margin="0,0,4,0" Padding="8,0" Content="SETUJUI"
+                                            Visibility="{Binding DataContext.IsKetua, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource B2V}}"
+                                            Command="{Binding DataContext.SetujuiCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Height="28" Margin="0,0,4,0" Padding="8,0" Content="TOLAK"
+                                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                                            Visibility="{Binding DataContext.IsKetua, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource B2V}}"
+                                            Command="{Binding DataContext.TolakCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+                                <Button Style="{StaticResource MaterialDesignIconButton}" Width="30" Height="30" ToolTip="Hapus"
+                                        Visibility="{Binding DataContext.IsBendahara, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource B2V}}"
+                                        Command="{Binding DataContext.HapusCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}">
+                                    <materialDesign:PackIcon Kind="Delete" Width="18" Height="18" />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <TextBlock VerticalAlignment="Center" Opacity="0.7" Margin="0,0,16,0">
+                <Run Text="{Binding TotalCount, Mode=OneWay}" /><Run Text=" transaksi" />
+            </TextBlock>
+            <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding SebelumnyaCommand}" ToolTip="Sebelumnya">
+                <materialDesign:PackIcon Kind="ChevronLeft" />
+            </Button>
+            <TextBlock VerticalAlignment="Center" Margin="8,0">
+                <Run Text="Halaman " /><Run Text="{Binding Page, Mode=OneWay}" /><Run Text=" / " /><Run Text="{Binding TotalPages, Mode=OneWay}" />
+            </TextBlock>
+            <Button Style="{StaticResource MaterialDesignIconButton}" Command="{Binding BerikutnyaCommand}" ToolTip="Berikutnya">
+                <materialDesign:PackIcon Kind="ChevronRight" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,77 @@
+<UserControl x:Class="KasKita.Views.LaporanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Style="{StaticResource PageStyle}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Laporan Keuangan Bulanan" Style="{StaticResource PageTitle}" Margin="0,0,0,12" />
+
+        <WrapPanel Grid.Row="1" Margin="0,0,0,12">
+            <ComboBox Width="170" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding Bulans}" DisplayMemberPath="Nama" SelectedValuePath="Angka"
+                      SelectedValue="{Binding SelectedBulan}" materialDesign:HintAssist.Hint="Bulan" />
+            <ComboBox Width="110" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding Tahuns}" SelectedItem="{Binding SelectedTahun}" materialDesign:HintAssist.Hint="Tahun" />
+            <Button Height="40" Margin="0,0,8,8" Command="{Binding ExportPdfCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,6,0" VerticalAlignment="Center" />
+                    <TextBlock Text="EKSPOR PDF" />
+                </StackPanel>
+            </Button>
+            <Button Height="40" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedButton}" Command="{Binding ExportExcelCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileExcel" Margin="0,0,6,0" VerticalAlignment="Center" />
+                    <TextBlock Text="EKSPOR EXCEL" />
+                </StackPanel>
+            </Button>
+        </WrapPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition /><ColumnDefinition /><ColumnDefinition /><ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <materialDesign:Card Grid.Column="0" Style="{StaticResource HoverCard}">
+                <StackPanel>
+                    <TextBlock Text="Saldo awal" Style="{StaticResource CardCaption}" />
+                    <TextBlock Text="{Binding Laporan.SaldoAwal, StringFormat='Rp {0:N0}', ConverterCulture=id-ID}" Style="{StaticResource CardValue}" />
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card Grid.Column="1" Style="{StaticResource HoverCard}">
+                <StackPanel>
+                    <TextBlock Text="Total masuk" Style="{StaticResource CardCaption}" />
+                    <TextBlock Text="{Binding Laporan.TotalMasuk, StringFormat='Rp {0:N0}', ConverterCulture=id-ID}" Style="{StaticResource CardValue}" />
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card Grid.Column="2" Style="{StaticResource HoverCard}">
+                <StackPanel>
+                    <TextBlock Text="Total keluar" Style="{StaticResource CardCaption}" />
+                    <TextBlock Text="{Binding Laporan.TotalKeluar, StringFormat='Rp {0:N0}', ConverterCulture=id-ID}" Style="{StaticResource CardValue}" />
+                </StackPanel>
+            </materialDesign:Card>
+            <materialDesign:Card Grid.Column="3" Style="{StaticResource HoverCard}">
+                <StackPanel>
+                    <TextBlock Text="Saldo akhir" Style="{StaticResource CardCaption}" />
+                    <TextBlock Text="{Binding Laporan.SaldoAkhir, StringFormat='Rp {0:N0}', ConverterCulture=id-ID}" Style="{StaticResource CardValue}" />
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
+        <DataGrid Grid.Row="3" Margin="0,8,0,0" ItemsSource="{Binding Mutasi}" AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" HeadersVisibility="Column" materialDesign:DataGridAssist.CellPadding="10 6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal, StringFormat='dd MMM yyyy', ConverterCulture=id-ID}" />
+                <DataGridTextColumn Header="Jenis" Binding="{Binding Jenis}" />
+                <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori.Nama}" />
+                <DataGridTextColumn Header="Keterangan" Width="*" Binding="{Binding Keterangan}" />
+                <DataGridTextColumn Header="Nominal (Rp)" Binding="{Binding Nominal, StringFormat=N0, ConverterCulture=id-ID}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

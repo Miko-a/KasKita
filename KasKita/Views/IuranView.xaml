@@ -1,0 +1,88 @@
+<UserControl x:Class="KasKita.Views.IuranView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Style="{StaticResource PageStyle}" Loaded="UserControl_Loaded">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Iuran Anggota" Style="{StaticResource PageTitle}" />
+            <TextBox x:Name="SearchBox" Grid.Column="1" Width="280" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Cari nama / NIM (Ctrl+F)"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
+        <!-- filter: anggota biasa hanya melihat iuran pribadinya -->
+        <WrapPanel Grid.Row="1" Margin="0,0,0,12" Visibility="{Binding IsAnggota, Converter={StaticResource InvB2V}}">
+            <ComboBox Width="160" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding Bulans}" DisplayMemberPath="Nama" SelectedValuePath="Angka"
+                      SelectedValue="{Binding SelectedBulan}" materialDesign:HintAssist.Hint="Bulan" />
+            <ComboBox Width="110" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding Tahuns}" SelectedItem="{Binding SelectedTahun}" materialDesign:HintAssist.Hint="Tahun" />
+            <ComboBox Width="150" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding FilterStatus}" materialDesign:HintAssist.Hint="Status" />
+            <CheckBox Content="Hanya penunggak (semua bulan)" VerticalAlignment="Center" Margin="8,0,16,8"
+                      IsChecked="{Binding HanyaPenunggak}" />
+            <TextBox Width="140" Margin="0,0,8,8" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Nominal iuran (Rp)"
+                     Visibility="{Binding IsBendahara, Converter={StaticResource B2V}}"
+                     Text="{Binding NominalIuran, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="BUAT TAGIHAN BULAN INI" Height="40" Margin="0,0,0,8"
+                    Visibility="{Binding IsBendahara, Converter={StaticResource B2V}}"
+                    Command="{Binding BuatTagihanCommand}" />
+        </WrapPanel>
+
+        <materialDesign:Card Grid.Row="2" Padding="14,10" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="AlertCircleOutline" Foreground="DarkOrange" Margin="0,0,8,0" VerticalAlignment="Center" />
+                <TextBlock VerticalAlignment="Center">
+                    <Run Text="Tunggakan pada daftar ini: " /><Run Text="{Binding JumlahTunggakan, Mode=OneWay}" FontWeight="SemiBold" />
+                    <Run Text=" tagihan, total " /><Run Text="{Binding TotalTunggakan, Mode=OneWay, StringFormat='Rp {0:N0}', ConverterCulture=id-ID}" FontWeight="SemiBold" />
+                </TextBlock>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Items}" AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" HeadersVisibility="Column" EnableRowVirtualization="True"
+                  materialDesign:DataGridAssist.CellPadding="10 6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Anggota" Width="*" Binding="{Binding Anggota.Nama}" />
+                <DataGridTextColumn Header="NIM/NRP" Binding="{Binding Anggota.Nim}" />
+                <DataGridTextColumn Header="Bulan" Binding="{Binding BulanNama}" />
+                <DataGridTextColumn Header="Nominal (Rp)" Binding="{Binding Nominal, StringFormat=N0, ConverterCulture=id-ID}" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+                <DataGridTextColumn Header="Tanggal bayar"
+                                    Binding="{Binding TanggalBayar, StringFormat='dd MMM yyyy', ConverterCulture=id-ID, TargetNullValue='-'}" />
+                <DataGridTemplateColumn x:Name="AksiColumn" Header="Aksi">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="TANDAI LUNAS" Height="28" Padding="8,0"
+                                    Command="{Binding DataContext.BayarCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="Menunggak">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
