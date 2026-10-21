@@ -1,82 +1,150 @@
 # KasKita
 
-**Aplikasi Desktop Manajemen Keuangan Organisasi Mahasiswa**  
-Laporan Proyek Evaluasi Tengah Semester (ETS)  
-Mata Kuliah Pemrograman Berbasis Kerangka Kerja (PBKK)
+## Mengelola Keuangan Organisasi Mahasiswa dengan Lebih Mudah, Transparan, dan Terstruktur
 
-## Identitas Proyek
+KasKita adalah aplikasi desktop berbasis Windows yang dirancang untuk membantu organisasi mahasiswa dalam mengelola keuangan secara lebih rapi, efisien, dan akuntabel. Aplikasi ini dikembangkan dengan pendekatan Rich UI menggunakan WPF (.NET 8) dan C#, sehingga tampilannya modern, responsif, dan mudah digunakan bahkan oleh pengguna yang tidak terbiasa dengan sistem keuangan yang kompleks.
 
-- **Institusi:** Departemen Teknik Informatika, Institut Teknologi Sepuluh Nopember
-- **Platform:** Desktop Windows
-- **Framework:** .NET 8 dan Windows Presentation Foundation (WPF)
-- **Bahasa pemrograman:** C#
-- **Basis data:** SQLite
+Dengan fokus pada kebutuhan pengelola organisasi mahasiswa, KasKita hadir sebagai solusi digital untuk mengatasi masalah umum seperti pencatatan kas yang tersebar, sulitnya memantau iuran anggota, serta minimnya transparansi dalam pengelolaan anggaran kegiatan. Aplikasi ini tidak hanya berfungsi sebagai alat pencatat transaksi, tetapi juga sebagai dashboard untuk memantau kondisi keuangan organisasi secara realtime.
 
-- Link Demo: https://youtu.be/mV4gYxfGaKI
+
+## 1. Deskripsi Aplikasi dan Ruang Lingkup Fitur
+
+KasKita merupakan aplikasi manajemen keuangan organisasi mahasiswa yang membantu bendahara, ketua, dan anggota dalam mengelola seluruh aspek kas organisasi mulai dari pencatatan transaksi, pembayaran iuran, hingga pelaporan keuangan dan anggaran kegiatan. Aplikasi ini dibangun dengan antarmuka berbahasa Indonesia agar lebih mudah dipahami dan digunakan oleh komunitas kampus.
+
+### Ruang Lingkup Fitur Utama
+
+#### a. Autentikasi dan Manajemen Peran
+- Login berbasis akun pengguna
+- Sistem role-based access untuk tiga peran utama:
+  - Bendahara
+  - Ketua
+  - Anggota
+- Keamanan kata sandi menggunakan hashing BCrypt, sehingga data login lebih aman
+
+#### b. Dashboard Keuangan
+- Ringkasan kondisi keuangan organisasi
+- Informasi saldo terkini, pemasukan, pengeluaran, dan tren keuangan
+- Visualisasi data transaksi agar pengurus dapat membaca kondisi keuangan dengan cepat
+
+#### c. Pencatatan Transaksi Kas
+- Input pemasukan dan pengeluaran kas organisasi
+- Kategori transaksi yang dapat diatur sesuai kebutuhan
+- Informasi seperti tanggal, periode, keterangan, nominal, dan bukti transaksi
+- Proses persetujuan khusus untuk pengeluaran tertentu dengan ambang batas tertentu
+
+#### d. Pengelolaan Iuran Anggota
+- Pencatatan iuran per anggota per periode
+- Status pembayaran: lunas atau menunggak
+- Mempermudah bendahara dalam memantau kewajiban anggota secara terstruktur
+
+#### e. Manajemen Anggaran Kegiatan
+- Pencatatan kegiatan organisasi
+- Rincian anggaran yang direncanakan
+- Pemantauan realisasi penggunaan anggaran
+- Membantu pengurus memastikan kegiatan sesuai dengan alokasi dana
+
+#### f. Data Master Organisasi
+- Pengelolaan data anggota
+- Pengelolaan data periode kepengurusan
+- Pengelolaan kategori transaksi dan kas
+- Menyediakan fondasi data yang konsisten untuk seluruh aktivitas organisasi
+
+#### g. Laporan Keuangan
+- Menghitung saldo awal, total pemasukan, total pengeluaran, dan saldo akhir
+- Menampilkan daftar mutasi per bulan
+- Menyediakan analisis ringkas untuk keperluan evaluasi organisasi
+
+#### h. Ekspor Laporan
+- Export laporan ke PDF
+- Export ke format Excel/Spreadsheet
+- Memudahkan pengurus untuk dibagikan ke pihak yang berkepentingan
+
+#### i. Backup dan Restore Data
+- Fitur pencadangan basis data SQLite
+- Proses pemulihan data menjadi lebih mudah dan aman
+- Mengurangi risiko kehilangan data akibat human error atau masalah perangkat
+
+### Fokus Pengguna
+KasKita dirancang untuk mendukung kebutuhan pengurus organisasi mahasiswa dalam menjalankan tugas administratif keuangan secara lebih profesional. Aplikasi ini tidak hanya berguna untuk bendahara, tetapi juga membantu ketua dalam memantau kondisi keuangan dan anggota dalam melihat status keanggotaan serta kewajiban iuran mereka.
+
+
+## 2. Latar Belakang Pembuatan Aplikasi
+
+Pada banyak organisasi mahasiswa, pengelolaan keuangan masih sering dilakukan secara manual. Data transaksi dicatat pada buku kas, spreadsheet, atau bahkan hanya melalui chat grup. Kondisi ini menimbulkan beberapa masalah, antara lain:
+
+- transaksi tidak terdokumentasi dengan rapi
+- sulitnya melacak pemasukan dan pengeluaran secara historis
+- keterlambatan dalam pengecekan status iuran anggota
+- kurangnya transparansi antara bendahara dan pengurus lainnya
+- kesulitan dalam membuat laporan keuangan saat periode evaluasi
+
+Fenomena ini mendorong kebutuhan akan sistem yang dapat mengelola keuangan organisasi secara digital, terstruktur, dan mudah diaudit. Oleh karena itu, KasKita dibuat sebagai solusi yang sederhana namun efektif untuk mengelola keuangan organisasi mahasiswa di lingkungan kampus.
+
+
+## 3. Manfaat Aplikasi
+
+KasKita memberikan berbagai manfaat yang signifikan, baik dari sisi operasional maupun pengambilan keputusan organisasi.
+
+### Manfaat utama:
+
+1. Meningkatkan transparansi keuangan
+   - Semua transaksi tercatat dengan jelas dan mudah dipantau.
+
+2. Menghemat waktu administrasi
+   - Proses pencatatan, pengecekan, dan pembuatan laporan menjadi lebih cepat.
+
+3. Meningkatkan akuntabilitas pengurus
+   - Setiap transaksi dapat ditelusuri dan dipertanggungjawabkan.
+
+4. Mempermudah pengambilan keputusan
+   - Dashboard dan laporan membantu ketua dan bendahara membangun keputusan berdasarkan data nyata.
+
+5. Mengurangi risiko kesalahan manual
+   - Sistem terstruktur meminimalkan celah human error dalam pencatatan keuangan.
+
+6. Mendukung pengelolaan kegiatan organisasi
+   - Anggaran kegiatan dapat direncanakan, diawasi, dan dievaluasi dengan lebih baik.
+
+7. Meningkatkan profesionalisme organisasi
+   - Organisasi menjadi lebih siap dalam mengelola keuangan dengan cara yang modern dan terukur.
+
+
+## 4. Teknologi yang Digunakan
+
+KasKita dibangun dengan stack teknologi yang relevan untuk aplikasi desktop rich UI:
+
+| Komponen | Teknologi |
+| --- | --- |
+| Aplikasi Desktop | WPF, XAML, .NET 8, C# |
+| Pola arsitektur | MVVM dengan CommunityToolkit.Mvvm |
+| Basis data | SQLite |
+| ORM | Entity Framework Core |
+| UI Design | MaterialDesignInXAML |
+| Visualisasi data | LiveCharts2 |
+| Ekspor Excel | ClosedXML |
+| Ekspor PDF | QuestPDF |
+| Hash password | BCrypt.Net |
+
+Struktur kode dalam proyek dipisahkan ke folder seperti `Views`, `ViewModels`, `Models`, `Data`, `Services`, dan `Resources`, agar pengelolaan aplikasi lebih modular, terorganisir, dan mudah dikembangkan di masa depan.
+
+
+## 5. Identitas Proyek
+
+- Institusi: Departemen Teknik Informatika, Institut Teknologi Sepuluh Nopember
+- Platform: Desktop Windows
+- Bahasa pemrograman: C#
+- Framework: .NET 8 dan WPF
+- Basis data: SQLite
 
 ### Tim Pengembang
-
 - Agil Lukman Hakim Muchdi (5025241037)
 - Berwyn Rafif Alvaro (5025241029)
 - Farrel Jatmiko Aji (5025241193)
 
-## Ringkasan
+Demo aplikasi: https://youtu.be/mV4gYxfGaKI
 
-KasKita adalah aplikasi desktop untuk membantu pengurus organisasi mahasiswa mencatat dan memantau keuangan organisasi. Aplikasi menyediakan pengelolaan transaksi kas, iuran anggota, anggaran kegiatan, dan laporan keuangan dalam satu aplikasi. Data disimpan secara lokal menggunakan SQLite, sedangkan laporan bulanan dapat diekspor ke PDF dan Excel.
 
-Aplikasi menyediakan tiga peran pengguna, yaitu Bendahara, Ketua, dan Anggota. Antarmuka berbahasa Indonesia dirancang agar aktivitas pencatatan dan pemantauan keuangan dapat dilakukan melalui halaman-halaman yang terpisah sesuai modulnya.
-
-## Latar Belakang dan Tujuan
-
-Pencatatan keuangan yang tersebar di buku, percakapan, atau spreadsheet dapat menyulitkan pengurus dalam menelusuri transaksi, memantau iuran, membandingkan anggaran dengan realisasi, dan menyusun laporan. KasKita dikembangkan sebagai sarana pencatatan terpusat yang memudahkan pengurus melihat kondisi kas dan menyiapkan laporan.
-
-Tujuan proyek:
-
-1. Menyediakan pencatatan pemasukan dan pengeluaran yang terstruktur.
-2. Membantu bendahara memantau pembayaran iuran anggota.
-3. Mendukung pengelolaan serta pemantauan anggaran kegiatan.
-4. Menampilkan ringkasan kondisi keuangan melalui dashboard.
-5. Menghasilkan laporan keuangan bulanan dalam format PDF dan Excel.
-
-## Fitur Aplikasi
-
-- **Login dan peran pengguna:** autentikasi menggunakan kata sandi yang di-hash dengan BCrypt.
-- **Dashboard:** ringkasan keuangan dan visualisasi data transaksi.
-- **Transaksi kas:** pencatatan pemasukan dan pengeluaran, kategori transaksi, keterangan, tanggal, periode, serta bukti transaksi.
-- **Persetujuan:** transaksi pengeluaran tertentu dapat menunggu persetujuan Ketua; aplikasi menetapkan ambang persetujuan sebesar Rp500.000.
-- **Iuran anggota:** pencatatan iuran per anggota dan periode, dengan status lunas atau menunggak.
-- **Anggaran kegiatan:** pencatatan kegiatan dan rincian anggaran serta pemantauan realisasi pengeluaran yang disetujui.
-- **Data master:** pengelolaan anggota, periode, dan kategori kas.
-- **Laporan keuangan:** perhitungan saldo awal, total pemasukan, total pengeluaran, saldo akhir, dan daftar mutasi per bulan.
-- **Ekspor laporan:** pembuatan dokumen PDF dan spreadsheet Excel.
-- **Pencadangan data:** layanan untuk mencadangkan dan memulihkan berkas basis data SQLite.
-
-## Peran Pengguna
-
-| Peran | Tanggung jawab utama |
-| --- | --- |
-| Bendahara | Mengelola transaksi, iuran, data master, anggaran, dan laporan keuangan. |
-| Ketua | Memantau kondisi keuangan serta meninjau transaksi atau anggaran yang memerlukan persetujuan. |
-| Anggota | Melihat informasi yang berkaitan dengan keanggotaan dan status iuran. |
-
-Hak akses yang tersedia pada aplikasi dapat berbeda sesuai peran yang sedang digunakan.
-
-## Teknologi dan Arsitektur
-
-| Komponen | Teknologi |
-| --- | --- |
-| Aplikasi desktop | WPF, XAML, .NET 8, C# |
-| Pola presentasi | MVVM dengan CommunityToolkit.Mvvm |
-| Basis data dan ORM | SQLite dan Entity Framework Core |
-| Komponen tampilan | MaterialDesignInXAML |
-| Visualisasi data | LiveCharts2 |
-| Ekspor Excel | ClosedXML |
-| Ekspor PDF | QuestPDF |
-| Hash kata sandi | BCrypt.Net |
-
-Kode dipisahkan ke dalam folder `Views`, `ViewModels`, `Models`, `Data`, `Services`, dan `Resources`. View menampilkan antarmuka WPF, ViewModel menghubungkan tampilan dengan operasi aplikasi, Model menyimpan entitas domain, Data mengatur konteks dan inisialisasi basis data, sedangkan Services menangani kebutuhan seperti autentikasi, laporan, notifikasi, dan pencadangan.
-
-## Struktur Proyek
+## 6. Struktur Proyek
 
 ```text
 KasKita/
@@ -93,13 +161,15 @@ KasKita/
     └── Views/
 ```
 
-## Persyaratan Sistem
 
-- Windows 10 atau Windows 11.
-- .NET 8 SDK untuk membangun dan menjalankan proyek dari kode sumber.
-- Visual Studio 2022 dengan workload **.NET desktop development**, atau .NET CLI.
+## 7. Persyaratan Sistem
 
-## Menjalankan Aplikasi
+- Windows 10 atau Windows 11
+- .NET 8 SDK
+- Visual Studio 2022 dengan workload .NET desktop development, atau .NET CLI
+
+
+## 8. Cara Menjalankan Aplikasi
 
 Jalankan perintah berikut dari direktori repositori yang berisi `KasKita.sln`:
 
@@ -108,17 +178,18 @@ dotnet restore .\KasKita\KasKita.csproj
 dotnet run --project .\KasKita\KasKita.csproj
 ```
 
-Saat dijalankan pertama kali, aplikasi membuat basis data dan data contoh secara otomatis jika belum ada pengguna yang tersimpan. Basis data menggunakan SQLite dan berada di:
+Saat dijalankan pertama kali, aplikasi akan membuat database SQLite dan data contoh secara otomatis jika belum ada pengguna tersimpan. Database default berada di:
 
 ```text
 %LOCALAPPDATA%\KasKita\kaskita.db
 ```
 
-Bukti transaksi yang disalin oleh aplikasi disimpan di subfolder `Bukti` pada direktori data KasKita tersebut.
+Bukti transaksi yang diunggah juga akan disimpan di subfolder `Bukti` di direktori data KasKita tersebut.
 
-## Akun Data Contoh
 
-Data awal menyediakan akun untuk mencoba setiap peran berikut:
+## 9. Akun Demo
+
+Aplikasi menyediakan data contoh untuk mencoba tiap peran berikut:
 
 | Peran | Username | Password |
 | --- | --- | --- |
@@ -126,15 +197,13 @@ Data awal menyediakan akun untuk mencoba setiap peran berikut:
 | Ketua | `ketua` | `ketua123` |
 | Anggota | `anggota` | `anggota123` |
 
-Akun dan kata sandi ini hanya ditujukan untuk demonstrasi lokal. Ganti atau hapus data contoh sebelum menggunakan aplikasi untuk data nyata.
+Akun ini hanya digunakan untuk demonstrasi lokal. Sebaiknya ganti atau hapus data demo sebelum digunakan untuk data organisasi yang sebenarnya.
 
-## Entitas Data
 
-Basis data memuat entitas utama berikut:
+## 10. Kesimpulan
 
-- **User** dan **Anggota** untuk akun, peran, dan data anggota.
-- **Periode** untuk periode kepengurusan.
-- **Kategori** dan **Transaksi** untuk pencatatan arus kas.
-- **Iuran** untuk kewajiban dan pembayaran anggota.
-- **Kegiatan** dan **AnggaranItem** untuk anggaran dan realisasi kegiatan.
-- **LogAktivitas** untuk pencatatan aktivitas aplikasi.
+KasKita hadir sebagai solusi digital yang relevan untuk kebutuhan pengelolaan keuangan organisasi mahasiswa. Dengan pendekatan Rich UI, fitur yang terintegrasi, dan proses yang mudah dipahami, aplikasi ini membantu organisasi menjadi lebih tertib, transparan, dan profesional dalam mengelola dana kegiatan. Lebih dari sekadar aplikasi pencatat keuangan, KasKita adalah langkah menuju tata kelola organisasi yang lebih modern dan akuntabel.
+
+---
+
+Jika Anda tertarik untuk melihat proyek ini lebih lanjut, jangan ragu untuk membuka repository ini dan mencoba aplikasi secara lokal.
