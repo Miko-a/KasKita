@@ -12,6 +12,8 @@ Mata Kuliah Pemrograman Berbasis Kerangka Kerja (PBKK)
 - **Bahasa pemrograman:** C#
 - **Basis data:** SQLite
 
+- Link Demo: https://youtu.be/mV4gYxfGaKI
+
 ### Tim Pengembang
 
 - Agil Lukman Hakim Muchdi (5025241037)
